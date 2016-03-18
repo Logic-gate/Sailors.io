@@ -1,0 +1,59 @@
+<br>
+<div class="container" style="text-align:center">
+  <h4>
+    
+    <a href="{{ url_for('main_page')}}">
+      <img src="{{ url_for('static', filename='sailors.png')}}" height="100px" padding='0px'>
+    </a>
+  </h4>
+  <p class="palette-paragraph">
+    A project by 
+    <strong>
+      @m4d_d3v
+    </strong>
+    .
+  </p>
+</div>
+
+<!-- /row -->
+
+
+<script>
+ 
+      var states = new Bloodhound({
+        datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.word); },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 4,
+        local: [
+          { word: "Jolla" },
+          { word: "Sailfish" },
+          { word: "Dev" },
+          { word: "Off-Topic" },
+          { word: "Cool" },
+          { word: "Cat video" }
+        ]
+      });
+
+      states.initialize();
+
+      $('input.tagsinput').tagsinput();
+
+      
+
+      $('input.tagsinput-typeahead').tagsinput('input').typeahead(null, {
+        name: 'states',
+        displayKey: 'word',
+        source: states.ttAdapter()
+      });
+
+      $('input.typeahead-only').typeahead(null, {
+        name: 'states',
+        displayKey: 'word',
+        source: states.ttAdapter()
+      });
+
+    </script>
+    
+<script>
+  videojs.options.flash.swf = "{{ url_for('static', filename='dist/js/vendors/video-js.swf')}}"
+</script>

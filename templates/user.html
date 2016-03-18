@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  
+  
+    <div class="row">
+      <div class="row demo-tiles">
+        <div class="col-xs-12">
+          <div class="tile">
+            
+            <img src="{{ User.avatar(128) }}" alt="Avatar" class="tile-image big-illustration">
+            <h3 class="tile-title">
+              {{User.get_id()}}
+            </h3>
+            <p>
+              {{User.get_bio()}}
+            </p>
+            
+          </div>
+        </div>
+        
+        
+        </div>
+        
+        <!-- /tiles -->
+        
+        <div class="col-xs-12">
+          <div class="row">
+            
+            
+            
+            {% for i in posts %}
+            
+            <div class="col-xs-12">
+              <dl class='palette palette-green-sea post_info'>
+            	{% if edit==True %}
+              <dd>
+                {{i.user}}  
+              
+                  <a href="{{url_for('edit', post_id=i._id)}}" class="palette-headline navbar-right edit-btn">
+                    Edit
+                  </a>
+                  
+                 
+               </dd> 
+                {% if i.updated_on %} 
+                <dd>
+                <b>Updated on</b> {{i.updated_on}} <i>|</i> <b>Created on</b> {{i.created_on}}
+                </dd>
+                {% else%}
+                <dd>
+                  <b>Created on</b> {{i.created_on}}
+                </dd>
+                  {% endif %}
+
+              
+              {% else %}
+              <dd>
+                {{i.user}}   
+                <i>
+                  {{i.created_on}}
+                </i>
+              </dd>
+              {% endif %}
+              <dd><b>Title:</b> {{ i.title }}</dd>
+             </dl>
+             
+             <dl class="post-class">
+               <dt>
+                 {{ i.entry|markdown }} 
+               </dt>
+               {% for y in i.tags %}
+               
+                    <a href="{{url_for('by_tag', tag=y)}}" class="btn tag_btn">{{y}}</a>
+                {% endfor %}
+                <a href="{{url_for('delete', post_id=i._id)}}" class="btn delete-btn navbar-right">
+                    Delete
+                  </a>   
+             </dl>
+             
+             
+             
+             <br>
+              
+            </div>
+
+            {% endfor %}
+             </div>
+        </div>
+        <!-- /swatches items -->
+        
+    </div>
+    <div class="center_stage">
+  <!-- /swatches row -->
+   {{ pagination.links }}
+   </div>
+ 
+    <!-- /swatches row -->
+    
+    
+</div>
+
+
+{% endblock %}

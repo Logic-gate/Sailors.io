@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Article">
+  
+  <head>
+
+    <meta charset="utf-8">
+
+     <!-- Update your html tag to include the itemscope and itemtype attributes. -->
+
+
+<!-- Place this data between the <head> tags of your website -->
+<title>Sailors</title>
+<meta name="description" content="All about Jolla/Sailfish" />
+
+<!-- Schema.org markup for Google+ -->
+<meta itemprop="name" content="Sailors">
+<meta itemprop="description" content="All about Jolla/Sailfish">
+<meta itemprop="image" content="http://beta.sailors.io/static/sailors.png">
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="http://beta.sailors.io/static/sailors.png">
+<meta name="twitter:site" content="@m4d_d3v">
+<meta name="twitter:title" content="Sailors">
+<meta name="twitter:description" content="Welcome to the anti-self-aggrandizementt network">
+<meta name="twitter:creator" content="@m4d_d3v">
+<!-- Twitter summary card with large image must be at least 280x150px -->
+<meta name="twitter:image:src" content="http://beta.sailors.io/static/sailors.png">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="All about Jolla/Sailfish" />
+<meta property="og:type" content="Blog" />
+<meta property="og:url" content="http://beta.sailors.io" />
+<meta property="og:image" content="http://beta.sailors.io/static/sailors.png" />
+<meta property="og:description" content="All about Jolla/Sailfish" />
+<meta property="og:site_name" content="Sailors.io" />
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Loading Bootstrap -->
+    <link href="{{url_for('static', filename='dist/css/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    
+    <!-- Loading Flat UI -->
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="{{ url_for('static', filename='dist/js/vendor/jquery.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/js/vendor/video.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/js/flat-ui.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='docs/assets/js/application.js')}}"></script>
+    <link href="{{url_for('static', filename='dist/css/flat-ui.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    
+    
+    <link rel="shortcut icon" href="dist/img/favicon.ico">
+    
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+<script src="../../dist/js/vendor/html5shiv.js">
+</script>
+<script src="../../dist/js/vendor/respond.min.js">
+</script>
+<![endif]-->
+  {{ pagedown.include_pagedown() }}
+  </head>
+  
+  <body>
+    <style type="text/css">
+      @font-face {
+        font-family: le-grand;
+        src: url({{url_for('static', filename='le_Grand_Saut_TEXTUAL.ttf')}});
+      }
+      
+      .sailor_name {
+        font-family: 'le-grand';
+        font-size: 44px;
+        color: #464646;
+      }
+      
+      .edit-btn {
+        
+        color: #e7e7e7;
+      }
+      a:hover{
+        color:    #d35400;
+        
+      }
+      
+      .post-class {
+        
+        border-bottom: 3px solid;
+        text-align: center;
+        border-color: #c0392b;
+        
+      }
+      
+      .post_info {
+        border-top: 3px solid;
+        border-bottom: 1px solid;
+        border-bottom-color:#c0392b;
+        border-top-color: #16a085;
+        color: #000;
+        background-color: transparent;
+      }
+      
+      .post_info a{
+        color: #34495e;
+      }
+
+      .post_info a:hover{
+        color: #000;
+      }
+      pre, pre code {
+        color: #e7e7e7;
+        
+      }
+
+       .post-class dt, .post-class img, .post-class p img, .center_stage, blockquote{
+        text-align: center;
+           max-width: -moz-available;  
+           max-width: -webkit-fill-available;
+          
+        
+        
+      }
+
+       .post-class pre, .post-class pre code, .post-class h4, .post-class h5, .post-class h6, .post-class ul, .post-class li, .post-class em, .post-class a, .post-class p{
+        text-align: left;
+           max-width: -moz-available;  
+           max-width: -webkit-fill-available;
+          
+
+      }
+
+      .post-class dt p img {
+        margin-left: auto;
+        margin-right: auto;
+        display: block
+      }
+
+      .up_link{
+        color: #e7e7e7;
+        font-weight: bold;
+        
+      }
+      
+      img{
+         max-width: -moz-available;          /* WebKit-based browsers will ignore this. */
+         max-width: -webkit-fill-available;
+          
+          
+      }
+      body{
+        background-color: #f9f9f9;
+
+      }
+      .tag_btn {
+        float: left;
+        background-color: #c0392b;
+        border-radius: 0px;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        color: #e7e7e7;
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        }
+
+      .tag_btn a:hover{
+        color: #ffffff;
+        }
+
+        .delete-btn{
+        background-color: #7f8c8d;
+        border-radius: 0px;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        color: #e7e7e7;
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        
+        }
+
+        .delete-btn a:hover{
+
+        color: #ffffff;
+        
+        }
+
+        iframe {
+              max-width: -moz-available;          /* WebKit-based browsers will ignore this. */
+              max-width: -webkit-fill-available;
+        }
+
+        .pagination-page-info {
+         padding: .6em;
+        padding-left: 0;
+        width: 40em;
+        margin: .5em;
+      margin-left: 0;
+      font-size: 12px;
+  }
+.pagination-page-info b {
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+}
+
+
+.hideme {
+  margin-bottom: 5px;
+}
+
+.q_form {
+        
+        text-align: center;
+        
+      }
+.flat_btn {
+  border-radius: 0px;
+}
+
+#progressBar {
+
+height: 25px;
+background-color: #16a085;
+display: none;
+margin-top: 1px;
+  border-radius: 6px;
+}
+
+#progressBar div {
+height: 100%;
+width: 0;
+background-color: #48c9b0;
+ border-radius: 6px;
+}
+    </style>
+    
+    <nav class="navbar  navbar-lg" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-4">
+          <span class="sr-only">
+            Toggle navigation
+          </span>
+        </button>
+        {% if current_user.is_authenticated() == True%}
+        <a href="{{ url_for('user', nickname=current_user.get_id())}}" class='sailor_name navbar-brand'>
+          {{current_user.get_id()}}
+        </a>
+        
+        {% else %}
+        <a class='sailor_name navbar-brand'>
+          A Sailor's Name
+        </a>
+        
+        {% endif %}
+      </div>
+      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      {% if current_user.is_authenticated() == True%}
+      <div class="collapse navbar-collapse" id="navbar-collapse-4">
+        <ul class="nav navbar-nav">
+          <li>
+            
+            <a href="{{ url_for('write')}}" style="margin:10px">
+              <i class="fa fa-pencil-square-o fa-2x">
+              </i>
+            </a>
+            
+          </li>
+          <li>
+            
+            <a href="{{ url_for('posts')}}" style="margin:10px">
+              <i class="fa  fa fa-book fa-2x">
+              </i>
+            </a>
+          </li>
+          
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            
+            <a href="{{ url_for('logout')}}" style="margin:10px">
+              <i class="fa fa-sign-out fa-2x">
+              </i>
+            </a>
+          </li>
+          <li>
+            
+            <a href="{{ url_for('settings', user=current_user.get_id())}}" style="margin:10px">
+              <i class="fa fa-cog fa-2x">
+              </i>
+            </a>
+          </li>
+          <li>
+            
+            <a href="{{ url_for('main_page')}}" style="margin:10px">
+              <i class="fa fa fa-question fa-2x">
+              </i>
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com/intent/tweet?text=%23ISupportJolla%20%40JollaHQ" style="margin:10px" target="_blank">
+              <i class="fa fa-heartbeat fa-2x">
+              </i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <div class="collapse navbar-collapse" id="navbar-collapse-4">
+        <ul class="nav navbar-nav">
+          <li>
+            
+            <a href="{{ url_for('posts')}}" style="margin:10px">
+              <i class="fa  fa fa-book fa-2x">
+              </i>
+            </a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            
+            <a href="{{ url_for('login')}}" style="margin:10px">
+              <i class="fa fa-sign-in fa-2x">
+              </i>
+            </a>
+          </li>
+          <li>
+            
+            <a href="{{ url_for('main_page')}}" style="margin:10px">
+              <i class="fa fa fa-question fa-2x">
+              </i>
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com/intent/tweet?text=%23ISupportJolla%20%40JollaHQ" style="margin:10px" target="_blank">
+              <i class="fa fa-heartbeat fa-2x">
+              </i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+      <!-- /.navbar-collapse -->
+    </nav>
+    
+    
+    {% include 'flash.html' %} 
+    {% block content %} 
+    {% endblock %} 
+    {% include 'footer.html' %}
+    
+  </body>
+  
+</html>

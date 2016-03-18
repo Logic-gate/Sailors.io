@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+
+<div class="container">
+  
+  
+  <div class="row">
+  
+    
+    <div class="col-xs-12">
+{% if current_user.is_authenticated() == True%}
+<form class="q_form" action="{{url_for('posts')}}" method="POST" name="form" enctype="multipart/form-data">
+    {{ form.link(class_="form-control login-field hideme flat_btn") }}<br>
+  <input  accept="image/*" type="file" name="file" class='flat_btn hideme_image' style="display:none"><br> 
+     <input class="btn btn-primary btn-lg btn-block hideme flat_btn" style="display:none" type="submit" value="Submit"/>
+   <input  class="btn btn-primary btn-lg btn-block hideme_image flat_btn" style="display:none" type="submit" value="Upload to Imgur | MAX 1mb"/> 
+     <br>
+</form>
+
+
+  <button id="UploadBtn" class="btn btn-primary flat_btn" type="button">Quick Image</button>
+
+
+  <button id="myButton" class="btn btn-primary flat_btn" type="button">Quick Link</button>
+
+  
+     <script type="text/javascript">
+   $('#UploadBtn').click(function() {
+ $('.hideme_image').toggle(100, function() {
+ });
+});
+      $('#myButton').click(function() {
+  $('.hideme').toggle(100, function() {
+    // Animation complete.
+  });
+});
+    </script>
+
+
+    {% endif %}
+
+      <div class="row">
+      
+      
+
+  
+
+        {% for i in posts %}
+        <div class="col-xs-12">
+          <dl class='palette palette-green-sea post_info'>
+            
+            <dd>
+              <a class="up_link" href="{{url_for('user', nickname=i.user)}}">
+                {{i.user}}
+              </a>
+              {% if i.updated_on %} 
+              <i class='navbar-right'>
+                Updated on {{i.updated_on}}<br>Created on {{i.created_on}}
+              </i>
+              
+              {% else%}
+              <i class='navbar-right'>
+                Created on {{i.created_on}}
+              </i>
+              {% endif %}
+            </dd>
+            <dd id="{{i.title.replace(' ', '%20')}}" href="#{{i.title.replace(' ', '%20')}}"><b>Title:</b> <a href="{{url_for('posts')}}#{{i.title.replace(' ', '%20')}}">{{ i.title }}</a></dd>
+          </dl>
+          
+          <dl class="post-class">
+              
+          <br>
+            <dt>
+              {{ i.entry|markdown }}
+            </dt>
+               {% for y in i.tags %}
+               
+                    <a href="{{url_for('by_tag', tag=y)}}" class="btn tag_btn">{{y}}</a>
+                {% endfor %}
+          </dl>
+          <br>
+       
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+    <!-- /swatches items -->
+  </div>
+  
+  <div class="center_stage">
+  <!-- /swatches row -->
+   {{ pagination.links }}
+   </div>
+ 
+</div>
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  
+  <div class="row">
+    <div class="row demo-tiles">
+      <div class="col-xs-12">
+        <div class="tile">
+          
+          <img src="{{ User.avatar(128) }}" alt="Avatar" class="tile-image big-illustration">
+          <h3 class="tile-title">
+            {{User.get_id()}}
+          </h3>
+          <p>
+            {{User.get_bio()}}
+          </p>
+          
+        </div>
+      </div>
+      
+      
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          
+          <div class="col-xs-12">
+            <form class="login-form" action="{{ url_for('settings', user=current_user.get_id())}}" method="POST" name="form">
+              <div class="login-form">
+                <div class="form-group">
+                  {{ form.hidden_tag() }}
+                  <h6>
+                    Bio
+                  </h6>
+                  {{ form.bio(class_="form-control login-field") }}
+                  
+                  <label class="login-field-icon fui-user" for="bio">
+                  </label>
+                </div>
+                
+                
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit"/>
+                
+                
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
