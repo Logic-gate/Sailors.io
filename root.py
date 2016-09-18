@@ -32,7 +32,7 @@ from link import Meta
 from imgur import Imgur
 from werkzeug import secure_filename
 import json
-
+import string
 
 
 
@@ -40,8 +40,8 @@ import json
 app = Flask(__name__)
 app.config.from_pyfile('root.cfg')
 lm = LoginManager()
-app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
-app.config['MAX_CONTENT_LENGTH'] = 1024000
+app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif', 'gifv'])
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 lm.init_app(app)
 lm.login_view = 'login'
 mail = Mail(app)
@@ -56,9 +56,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
-@app.route('/')
-def home():
-    return redirect(url_for('posts'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -134,20 +132,69 @@ def write():
     post_form = PostForm()
     if request.method == 'POST':
         collection = app.config['POSTS_COLLECTION']
+        private = app.config['PRIVATE_COLLECTION']
         post = post_form.post.data
         user = current_user.get_id()
         tags = post_form.tags.data.split(',')
         title = post_form.post_title.data
 
-        try:
 
-            collection.insert({"title": title, "entry":post, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
-            return redirect(url_for("posts"))
-        except:
-            flash("Something went bad....", category='error')
+        if 'private' in tags:
+            try:
+                private.insert({"title": title, "entry":post, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+                last_id = private.find_one({'title': title})
+                msg = 'Your post will remain private, it will not be indexed or searchable. s.sailors.io/private/%s' %last_id.get('_id') 
+                flash(msg, category='success')
+            except:
+                flash("Something went bad....", category='success')
+
+        else:
+
+            try:
+
+                collection.insert({"title": title, "entry":post, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+                return redirect(url_for("posts"))
+            except:
+                flash("Something went bad....", category='error')
     return render_template('write.html', form=post_form)
 
 
+
+def random_generation(size=10, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+@app.route('/', methods=['GET', 'POST'])
+def open_write():
+    post_form = PostForm()
+    if request.method == 'POST':
+        private = app.config['PRIVATE_COLLECTION']
+        post = post_form.post.data
+        user = random_generation(6)
+        tags = post_form.tags.data.split(',')
+        title = post_form.post_title.data + ' | ' + random_generation()
+        regex_movie =  re.compile(r'^(?:http)s?://\S+?\.(?:mp4)')
+
+        if regex_movie.findall(post):
+            post = '<video class="video-js" preload="auto" data-setup="{}"><source src="%s" type="video/mp4"></video>' %regex_movie.findall(post)[0]
+
+        try:
+            private.insert({"title": title, "entry":post, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+            last_id = private.find_one({'title': title})  
+            #msg = 'Your post will remain private, it will not be indexed or searchable. s.sailors.io/private/%s' %last_id.get('_id') 
+            #flash(msg, category='success')
+            return redirect(url_for("private_post", post_id=last_id.get('_id')))
+        except:
+            flash("Something went bad....", category='error')
+
+    return render_template('open_write.html', form=post_form)
+
+
+@app.route('/private/<post_id>')
+def private_post(post_id):
+    post_body = app.config['PRIVATE_COLLECTION'].find({"_id": ObjectId(post_id) })
+    title = app.config['PRIVATE_COLLECTION'].find_one({"_id": ObjectId(post_id) })
+    desc = title['title'] + ' On s.sailors.io' 
+    return render_template('private.html', title=title['title'], description=title['title'] ,posts=post_body, pagination=None, form=None)
 
 def get_tweet(tweetid):
     url = 'https://api.twitter.com/1/statuses/oembed.json?id=%s' %tweetid
@@ -156,41 +203,86 @@ def get_tweet(tweetid):
 
 
 def handle_posts(url):
+    print 'handle_posts init'
     regex_youtube =  re.compile(r'^(?:http)s?://(?:youtube.com|www.youtube.com)')
+    regex_youtube_share = re.compile(r'^(?:http)s?://(?:youtu.be)')
     regex_imgur =  re.compile(r'^(?:http)s?://(?:imgur.com)')
     regex_twitter =  re.compile(r'^(?:http)s?://(?:twitter.com)')
+    regex_xkcd = re.compile(r'^(?:http)s?://(?:xkcd.com)')
+    regex_img = re.compile(r'^(?:http)s?://\S+?\.(?:jpg|jpeg|gif|png|gifv)')
     user = current_user.get_id()
     collection = app.config['POSTS_COLLECTION']
     tags = ['External', 'Link']
     try:
-        link = Meta(url)
-        content = link.get_global_meta()
+        link = Meta(url) 
+        content = (link.get_meta('name', 'twitter:title')['content'], link.get_meta('name', 'twitter:description')['content'])
+        
     except:
-        link = url
-        content = ('External Link', '')
+        try:
+            link = Meta(url)
+            content = link.get_global_meta()
+        except:
+            link = url
+            content = ('External Link', '')
+
     if regex_youtube.findall(url):
+        print 'youtube link'
         entry_make = "<iframe width='560' height='315' src='https://www.youtube.com/embed/%s' frameborder='0' allowfullscreen></iframe>" %url.split('v=')[1]
+    elif regex_img.findall(url):
+        print 'Image'
+        get_image_name = re.compile('([-\w+]+\.(?:jpg|gif|png|gifv))')
+        content = (get_image_name.findall(url)[0], '')
+        gifv = re.compile('([-\w+]+\.(?:gifv|gif))')
+        if gifv.findall(url):
+            entry_make = "<h4>Sorry...gifs and gifv will break our ship...until next time</h4><br><h6>%s<br><a href='%s' target='_blank'>Direct Link</a> | <a target='_blank' href='https://www.google.com/search?q=%s'>Open with Google</a></h6>" %(content[0], url, url)
+        else:
+            entry_make = "<img src='%s' alt='%s' href='%s'/>" %(url, get_image_name.findall(url)[0], url)
+        tags = ['External', 'Image']
+
+    elif regex_xkcd.findall(url):
+        link = Meta(url)
+        make = link.get_xkcd()        
+        entry_make = "<dt>%s<br><img src='%s' alt='%s' href='%s' /></dt>" %(make['title'], make['src'], make['alt'], url)
+        content = (make['title'], '')
+        tags = ['xkcd', url.split('/')[3]]
+
+    elif regex_youtube_share.findall(url):
+        entry_make = "<iframe width='560' height='315' src='https://www.youtube.com/embed/%s' frameborder='0' allowfullscreen></iframe>" %url.split('/')[3]
     elif regex_imgur.findall(url):
         entry_make = '<blockquote class="imgur-embed-pub" lang="en" data-id="%s"><a href="//imgur.com/%s">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>' %(url.split('/')[4], url.split('/')[4])
     elif regex_twitter.findall(url):
+        print 'twitter link'
         t = get_tweet(url.split('/')[5])
         entry_make = t['html']
         content = ('Twitter', '')
         tags = ['External', 'Twitter']
     else:
-        entry_make = "<h4>%s</h4><br><h6><a href='%s' target='_blank'>%s</a></h6>" %(content[0], url, url)
+        print 'normal link'
+        entry_make = "<h4>%s</h4><br><h6>%s<br><a href='%s' target='_blank'>Direct Link</a> | <a target='_blank' href='https://www.google.com/search?q=%s'>Open with Google</a></h6>" %(content[0], content[1], url, url)
     try:
-        collection.insert({"title": content[0], "entry":entry_make, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+        collection.insert({"title": handle_long_title(content[0]), "entry":entry_make, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+        return redirect(url_for('posts'))
     except:
         flash("Something went bad....", category='error')
 
 
-@app.route('/posts', methods=['GET', 'POST'])
+def handle_long_title(title):
+    if len(title) > 25:
+        return title[:22] + '...'
+    else:
+        return title
+
+@app.route('/public', methods=['GET', 'POST'])
 def posts():
     form = QuickPost()
     url = form.link.data
+    random = form.random.data
+    user = current_user.get_id()
+    collection = app.config['POSTS_COLLECTION']
+    print url
     regex_http = re.compile(r'^(?:http|ftp)s?://')
     if request.method == 'POST' and request.files['file']:
+        print 'upload to imgur'
         file = request.files['file']
         if file and allowed_file(file.filename):
             collection = app.config['POSTS_COLLECTION']
@@ -209,15 +301,29 @@ def posts():
                     collection.insert({"title": f['id'], "entry":entry_make, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
                     os.remove(os.path.join(g, filename))
                     print 'file deleted'
+                    return redirect(url_for('posts'))
                 except: 
                     flash("Something went bad....", category='error')
             except:
                 flash("Something went bad...on imgur", category='error')
 
     if request.method == 'POST' and regex_http.findall(url):
+        print 'checking if user is OK'
         if current_user.is_authenticated() and url != None:
+            print 'User is OK'
             handle_posts(url)
-            
+
+    if request.method == 'POST' and random:
+        entry_make = random
+        tags = ['Random', 'Quick']
+        try:
+            collection.insert({"title": 'Random', "entry":entry_make, "user":user, "created_on": datetime.datetime.now(), "tags": tags})
+            return redirect(url_for('posts'))
+        except:
+            flash("Something went bad....", category='error')
+
+
+
 
 
 
@@ -225,12 +331,39 @@ def posts():
     page, per_page, offset = get_page_items()
     count = app.config['POSTS_COLLECTION'].find().sort(u'_id', -1).count()
     p = app.config['POSTS_COLLECTION'].find().sort(u'_id', -1).limit(per_page).skip(offset)
+
    
     pagination = get_pagination(page=page,
                                 per_page=per_page,
                                 total=count,
                                 record_name='posts')
     return render_template('posts.html', posts=p, pagination=pagination, form=form)
+
+
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = QuickPost()
+    query = request.args.get('search') 
+    page, per_page, offset = get_page_items()
+    count = app.config['POSTS_COLLECTION'].runCommand({ 'entry' : { 'search': query}}).sort(u'_id', -1).count()
+    p = app.config['POSTS_COLLECTION'].find({ '$text' : { '$search': query} }).sort(u'_id', -1).limit(per_page).skip(offset)
+    pagination = get_pagination(page=page,
+                                per_page=per_page,
+                                total=count,
+                                record_name='posts')
+    return render_template('posts.html', posts=p, pagination=pagination, form=form)
+
+
+
+@app.route('/single/<post_id>')
+def single_post(post_id):
+    form = QuickPost()
+    post_body = app.config['POSTS_COLLECTION'].find({"_id": ObjectId(post_id) })
+    title = app.config['POSTS_COLLECTION'].find_one({"_id": ObjectId(post_id) })
+    desc = title['title'] + ' On s.sailors.io' 
+    return render_template('single.html', title=title['title'], description=title['title'] ,posts=post_body, pagination=None, form=form)
 
 
 def get_pagination(**kwargs):
@@ -270,8 +403,6 @@ def by_tag(tag):
         flash("No tags founds", category='error')
         return redirect(url_for('posts'))
 
-
-
 @app.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
@@ -301,11 +432,12 @@ def send_email(to, subject, template):
     mail.send(msg)
 
 @app.route('/user/<nickname>')
+@login_required
 def user(nickname):
     page, per_page, offset = get_page_items()
     user = current_user.get_id()
-    count = app.config['POSTS_COLLECTION'].find({"user": user}).sort(u'_id', -1).count()
-    p = app.config['POSTS_COLLECTION'].find({"user": user}).sort(u'_id', -1).limit(per_page).skip(offset)
+    count = app.config['POSTS_COLLECTION'].find({"user": nickname}).sort(u'_id', -1).count()
+    p = app.config['POSTS_COLLECTION'].find({"user": nickname}).sort(u'_id', -1).limit(per_page).skip(offset)
 
     pagination = get_pagination(page=page,
                                 per_page=per_page,
@@ -420,12 +552,6 @@ def load_user(username):
         return None
     return User(u['_id'])
 
-
-
-
-@app.route('/testing')
-def port():
-    return render_template('port.html')
 
 
 @app.route('/main')

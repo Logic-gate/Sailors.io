@@ -46,11 +46,11 @@
                </dd> 
                 {% if i.updated_on %} 
                 <dd>
-                <b>Updated on</b> {{i.updated_on}} <i>|</i> <b>Created on</b> {{i.created_on}}
+                <b>Updated on</b> {{i.updated_on.strftime('%Y/%m/%d | %H:%M:%S')}} <i>|</i> <b>Created on</b> {{i.created_on.strftime('%Y/%m/%d | %H:%M:%S')}}
                 </dd>
                 {% else%}
                 <dd>
-                  <b>Created on</b> {{i.created_on}}
+                  <b>Created on</b> {{i.created_on.strftime('%Y/%m/%d | %H:%M:%S')}}
                 </dd>
                   {% endif %}
 

@@ -9,29 +9,30 @@
 
 
 <!-- Place this data between the <head> tags of your website -->
-<title>Sailors</title>
-<meta name="description" content="All about Jolla/Sailfish" />
+<title>{{title}}</title>
+
+<meta name="description" content="{{description}}" />
 
 <!-- Schema.org markup for Google+ -->
 <meta itemprop="name" content="Sailors">
-<meta itemprop="description" content="All about Jolla/Sailfish">
-<meta itemprop="image" content="http://beta.sailors.io/static/sailors.png">
+<meta itemprop="description" content="{{description}}">
+<meta itemprop="image" content="http://s.sailors.io/static/twitter_card.png">
 
+
+<meta name="robots" content="noindex,nofollow"/>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@m4d_d3v" />
+    <meta name="twitter:title" content="Ooh La La," />
+    <meta name="twitter:description" content="{{description}}" />
+    <meta name="twitter:image" content="http://s.sailors.io/static/twitter_card.png" />
 <!-- Twitter Card data -->
-<meta name="twitter:card" content="http://beta.sailors.io/static/sailors.png">
-<meta name="twitter:site" content="@m4d_d3v">
-<meta name="twitter:title" content="Sailors">
-<meta name="twitter:description" content="Welcome to the anti-self-aggrandizementt network">
-<meta name="twitter:creator" content="@m4d_d3v">
-<!-- Twitter summary card with large image must be at least 280x150px -->
-<meta name="twitter:image:src" content="http://beta.sailors.io/static/sailors.png">
 
 <!-- Open Graph data -->
 <meta property="og:title" content="All about Jolla/Sailfish" />
 <meta property="og:type" content="Blog" />
-<meta property="og:url" content="http://beta.sailors.io" />
-<meta property="og:image" content="http://beta.sailors.io/static/sailors.png" />
-<meta property="og:description" content="All about Jolla/Sailfish" />
+<meta property="og:url" content="http://s/sailors.io" />
+<meta property="og:image" content="http://s.sailors.io/static/twitter_card.png" />
+<meta property="og:description" content="{{description}}" />
 <meta property="og:site_name" content="Sailors.io" />
 
 
@@ -44,15 +45,37 @@
     <!-- Loading Flat UI -->
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="{{ url_for('static', filename='dist/js/vendor/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='dist/js/vendor/video.js')}}"></script>
     <script src="{{ url_for('static', filename='dist/js/flat-ui.min.js')}}"></script>
+     <script src="{{ url_for('static', filename='dist/js/vendor/video.js')}}"></script>
     <script src="{{ url_for('static', filename='docs/assets/js/application.js')}}"></script>
     <link href="{{url_for('static', filename='dist/css/flat-ui.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/> 
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/megrim" type="text/css"/> 
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/horta" type="text/css"/> 
     
     
-    <link rel="shortcut icon" href="dist/img/favicon.ico">
+    <link rel="shortcut icon" href="dist/img/favis/favicon.ico">
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="dist/img/favis/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="dist/img/favis/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="dist/img/favis/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="dist/img/favis/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="dist/img/favis/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="dist/img/favis/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="dist/img/favis/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="dist/img/favis/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="dist/img/favis/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="dist/img/favis/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="dist/img/favis/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="dist/img/favis/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="dist/img/favis/favicon-16x16.png">
+<link rel="manifest" href="ist/img/favis/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="dist/img/favis/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
     
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
@@ -66,143 +89,178 @@
   
   <body>
     <style type="text/css">
-      @font-face {
-        font-family: le-grand;
-        src: url({{url_for('static', filename='le_Grand_Saut_TEXTUAL.ttf')}});
-      }
-      
-      .sailor_name {
-        font-family: 'le-grand';
-        font-size: 44px;
-        color: #464646;
-      }
-      
-      .edit-btn {
-        
-        color: #e7e7e7;
-      }
-      a:hover{
-        color:    #d35400;
-        
-      }
-      
-      .post-class {
-        
-        border-bottom: 3px solid;
-        text-align: center;
-        border-color: #c0392b;
-        
-      }
-      
-      .post_info {
-        border-top: 3px solid;
-        border-bottom: 1px solid;
-        border-bottom-color:#c0392b;
-        border-top-color: #16a085;
-        color: #000;
-        background-color: transparent;
-      }
-      
-      .post_info a{
-        color: #34495e;
-      }
-
-      .post_info a:hover{
-        color: #000;
-      }
-      pre, pre code {
-        color: #e7e7e7;
-        
-      }
-
-       .post-class dt, .post-class img, .post-class p img, .center_stage, blockquote{
-        text-align: center;
-           max-width: -moz-available;  
-           max-width: -webkit-fill-available;
-          
-        
-        
-      }
-
-       .post-class pre, .post-class pre code, .post-class h4, .post-class h5, .post-class h6, .post-class ul, .post-class li, .post-class em, .post-class a, .post-class p{
-        text-align: left;
-           max-width: -moz-available;  
-           max-width: -webkit-fill-available;
-          
-
-      }
-
-      .post-class dt p img {
-        margin-left: auto;
-        margin-right: auto;
-        display: block
-      }
-
-      .up_link{
-        color: #e7e7e7;
-        font-weight: bold;
-        
-      }
-      
-      img{
-         max-width: -moz-available;          /* WebKit-based browsers will ignore this. */
-         max-width: -webkit-fill-available;
-          
-          
-      }
-      body{
-        background-color: #f9f9f9;
-
-      }
-      .tag_btn {
-        float: left;
-        background-color: #c0392b;
-        border-radius: 0px;
-        position: relative;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-        color: #e7e7e7;
-        font-family: "Lato", Helvetica, Arial, sans-serif;
-        font-size: 12px;
-        }
-
-      .tag_btn a:hover{
-        color: #ffffff;
-        }
-
-        .delete-btn{
-        background-color: #7f8c8d;
-        border-radius: 0px;
-        position: relative;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-        color: #e7e7e7;
-        font-family: "Lato", Helvetica, Arial, sans-serif;
-        font-size: 12px;
-        
-        }
-
-        .delete-btn a:hover{
-
-        color: #ffffff;
-        
-        }
-
-        iframe {
-              max-width: -moz-available;          /* WebKit-based browsers will ignore this. */
-              max-width: -webkit-fill-available;
-        }
-
-        .pagination-page-info {
-         padding: .6em;
-        padding-left: 0;
-        width: 40em;
-        margin: .5em;
-      margin-left: 0;
-      font-size: 12px;
-  }
+       @font-face {
+     font-family: le-grand;
+     src: url({{url_for('static', filename='le_Grand_Saut_TEXTUAL.ttf')}});
+}
+body {
+    background: #002B36 !important;
+}
+.sailor_name {
+    font-family: 'MegrimMedium';
+    font-size: 20px;
+    color: #e7e7e7;
+}
+.pagination {
+    background: #FF523B;
+    border-radius: 5px
+}
+.pagination li:last-child {
+    background: #FF523B;
+    border-radius: 5px
+}
+.pagination li a {
+    border: none
+}
+.pagination li a:hover {
+    background: #16a085
+}
+.pagination li.disabled > a:hover {
+    background: none
+}
+.navbar-brand {
+    padding-top: 40px!important;
+}
+.edit-btn {
+    color: #e7e7e7;
+}
+a:hover {
+    color: #d35400;
+}
+.post-class {
+    border-bottom: 3px solid;
+    text-align: left;
+    border-color: #c0392b;
+}
+.post_info {
+    border-top: 3px solid;
+    border-bottom: 1px solid;
+    border-bottom-color:#c0392b;
+    border-top-color: #16a085;
+    color: #FF523B;
+    font-family: 'HortaSemibold';
+    font-weight: normal;
+    font-style: normal;
+    font-size:15px;
+    background-color: transparent;
+}
+.logo_text {
+    color: #e7e7e7;
+    font-family: 'MegrimMedium';
+    background-color: transparent;
+}
+.post_info a {
+    color: #e7e7e7;
+}
+.post_info a:hover {
+    color: #1abc9c;
+}
+pre,
+pre code {
+    color: #e7e7e7;
+}
+p {
+    font-family: 'FantasqueSansMonoRegular';
+    font-weight: normal;
+    font-style: normal;
+}
+.post-class dt,
+.post-class img,
+.post-class p img,
+.center_stage,
+blockquote {
+    text-align: center;
+    font-family: 'FantasqueSansMonoRegular';
+    font-weight: normal;
+    font-style: normal;
+    max-width: -moz-available;
+    max-width: -webkit-fill-available;
+    color: #e7e7e7 !important;
+}
+.post-class pre,
+.post-class pre code,
+.post-class h4,
+.post-class h5,
+.post-class h6,
+.post-class ul,
+.post-class li,
+.post-class em,
+.post-class a,
+.post-class p {
+    text-align: left;
+    font-family: 'FantasqueSansMonoRegular';
+    font-weight: normal;
+    font-style: normal;
+    max-width: -moz-available;
+    max-width: -webkit-fill-available;
+}
+.post-class dt p img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block
+}
+.up_link {
+    color: #e7e7e7;
+    font-weight: bold;
+}
+img {
+    max-width: -moz-available;
+    /* WebKit-based browsers will ignore this. */
+    
+    max-width: -webkit-fill-available;
+}
+body {
+    background-color: #f9f9f9;
+}
+.tag_btn {
+    float: left;
+    background-color: #c0392b;
+    border-radius: 0px;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    color: #e7e7e7;
+    font-family: "Lato",
+    Helvetica,
+    Arial,
+    sans-serif;
+    font-size: 12px;
+}
+.tag_btn a:hover {
+    color: #ffffff;
+}
+.delete-btn {
+    background-color: #7f8c8d;
+    border-radius: 0px;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    color: #e7e7e7;
+    font-family: "Lato",
+    Helvetica,
+    Arial,
+    sans-serif;
+    font-size: 12px;
+}
+.delete-btn a:hover {
+    color: #ffffff;
+}
+iframe {
+    max-width: -moz-available;
+    /* WebKit-based browsers will ignore this. */
+    
+    max-width: -webkit-fill-available;
+}
+.pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
 .pagination-page-info b {
     color: black;
     background: #6aa6ed;
@@ -210,35 +268,63 @@
     padding: .1em .25em;
     font-size: 150%;
 }
-
-
 .hideme {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
-
 .q_form {
-        
-        text-align: center;
-        
-      }
+    max-width: -moz-available;
+    /* WebKit-based browsers will ignore this. */
+    
+    max-width: -webkit-fill-available;
+    text-align: center;
+}
 .flat_btn {
-  border-radius: 0px;
+    border-radius: 0px;
 }
-
 #progressBar {
-
-height: 25px;
-background-color: #16a085;
-display: none;
-margin-top: 1px;
-  border-radius: 6px;
+    height: 25px;
+    background-color: #16a085;
+    display: none;
+    margin-top: 1px;
+    border-radius: 6px;
 }
-
 #progressBar div {
-height: 100%;
-width: 0;
-background-color: #48c9b0;
- border-radius: 6px;
+    height: 100%;
+    width: 0;
+    background-color: #48c9b0;
+    border-radius: 6px;
+}
+.empty {
+    background-color: #16a085;
+}
+.flat_form {
+    border: 0px;
+}
+.pull-left {
+    color: #fff;
+}
+.search_bar {
+    margin-top: 10px;
+}
+h3,
+h1,
+h2 {
+    color: #E80C39;
+    font-family: 'MegrimMedium';
+}
+.login-form {
+    background: none;
+    color: #e7e7e7;
+}
+.form-control,
+.select2-search input[type="text"] {
+    border-radius: 0px;
+    background: none;
+    color: #e7e7e7;
+    border-bottom-color: #c0392b;
+    border-right: none;
+    border-left: none;
+    border-top-color: #16a085;
 }
     </style>
     
@@ -257,7 +343,7 @@ background-color: #48c9b0;
         
         {% else %}
         <a class='sailor_name navbar-brand'>
-          A Sailor's Name
+          
         </a>
         
         {% endif %}
@@ -267,6 +353,18 @@ background-color: #48c9b0;
       {% if current_user.is_authenticated() == True%}
       <div class="collapse navbar-collapse" id="navbar-collapse-4">
         <ul class="nav navbar-nav">
+       <!-- <li>
+        <form class="navbar-form search_bar" name="search" action="{{ url_for('search') }}" role="search">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" id="navbarInput-01" placeholder="Search" type="search">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn"><span class="fui-search"></span></button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </li> -->
           <li>
             
             <a href="{{ url_for('write')}}" style="margin:10px">
@@ -284,6 +382,7 @@ background-color: #48c9b0;
           </li>
           
         </ul>
+         
         <ul class="nav navbar-nav navbar-right">
           <li>
             
@@ -307,16 +406,34 @@ background-color: #48c9b0;
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/intent/tweet?text=%23ISupportJolla%20%40JollaHQ" style="margin:10px" target="_blank">
-              <i class="fa fa-heartbeat fa-2x">
+            
+          <a href="{{ url_for('open_write')}}" style="margin:10px">
+              <i class="fa fa-pencil fa-2x">
               </i>
             </a>
           </li>
+            <!--<a href="https://twitter.com/intent/tweet?text=%23ISupportJolla%20%40JollaHQ" style="margin:10px" target="_blank">
+              <i class="fa fa-heartbeat fa-2x">
+              </i>
+            </a>
+          </li> -->
         </ul>
       </div>
       {% else %}
       <div class="collapse navbar-collapse" id="navbar-collapse-4">
         <ul class="nav navbar-nav">
+     <!--  <li>
+        <form class="navbar-form search_bar" action="{{ url_for('search') }}" role="search">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" name="search" id="navbarInput-01" placeholder="Search" type="search">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn"><span class="fui-search"></span></button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </li> -->
           <li>
             
             <a href="{{ url_for('posts')}}" style="margin:10px">
@@ -341,8 +458,9 @@ background-color: #48c9b0;
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/intent/tweet?text=%23ISupportJolla%20%40JollaHQ" style="margin:10px" target="_blank">
-              <i class="fa fa-heartbeat fa-2x">
+            
+            <a href="{{ url_for('open_write')}}" style="margin:10px">
+              <i class="fa fa-pencil fa-2x">
               </i>
             </a>
           </li>
@@ -357,6 +475,9 @@ background-color: #48c9b0;
     {% block content %} 
     {% endblock %} 
     {% include 'footer.html' %}
+
+
+
     
   </body>
   

@@ -19,15 +19,15 @@ class SignupForm(Form):
     recap = RecaptchaField()
 
 class PostForm(Form):
-    post = PageDownField('Markdown supported')
+    post = PageDownField('Markdown supported', render_kw={"placeholder": "..."})
     pagedown = PageDownField()
-    post_title = StringField(render_kw={"placeholder": "Title"})
+    post_title = StringField(render_kw={"placeholder": "TITLE"})
     tags = StringField()
 
 class EditForm(Form):
     post = PageDownField('Markdown supported')
     pagedown = PageDownField()
-    post_title = StringField(render_kw={"placeholder": "Title"})
+    post_title = StringField(validators=[DataRequired()], render_kw={"placeholder": "Title"})
     tags = StringField()
     
 
@@ -38,4 +38,5 @@ class Comments(Form):
     comment = TextAreaField(render_kw={"placeholder": "Comment here"})
 
 class QuickPost(Form):
-    link = StringField(validators=[URL()], render_kw={"placeholder": "http://www.example.com, https://www.youtube.com/watch?v=dKrVegVI0Us, https://imgur.com/gallery/SUMPwQ7", "style": "display:none"})
+    link = StringField(validators=[DataRequired(), URL()], render_kw={"placeholder": "link, youtube, imgur, twitter, xkcd", "style": "display:none"})
+    random = StringField(validators=[DataRequired()], render_kw={"placeholder": "thoughts, jokes, questions....", "style": "display:none"})

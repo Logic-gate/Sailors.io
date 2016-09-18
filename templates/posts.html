@@ -13,18 +13,23 @@
     <div class="col-xs-12">
 {% if current_user.is_authenticated() == True%}
 <form class="q_form" action="{{url_for('posts')}}" method="POST" name="form" enctype="multipart/form-data">
-    {{ form.link(class_="form-control login-field hideme flat_btn") }}<br>
-  <input  accept="image/*" type="file" name="file" class='flat_btn hideme_image' style="display:none"><br> 
-     <input class="btn btn-primary btn-lg btn-block hideme flat_btn" style="display:none" type="submit" value="Submit"/>
-   <input  class="btn btn-primary btn-lg btn-block hideme_image flat_btn" style="display:none" type="submit" value="Upload to Imgur | MAX 1mb"/> 
+    {{ form.link(class_="form-control login-field hideme flat_btn") }}
+     <input class="btn btn-primary btn-lg btn-block hideme flat_btn" style="display:none" type="submit" value="Submit" / >
+  <input  accept="image/*" type="file" name="file" class='flat_btn hideme_image' style="display:none">
+   <input  class="btn btn-primary btn-lg btn-block hideme_image flat_btn" style="display:none" type="submit"   value="Upload to Imgur | MAX 10mb"/> 
+    {{ form.random(class_="form-control login-field hideme_random flat_btn") }}
+    <input  class="btn btn-primary btn-lg btn-block hideme_random flat_btn" style="display:none"  type="submit" value="Submit"/> 
+
      <br>
 </form>
 
 
-  <button id="UploadBtn" class="btn btn-primary flat_btn" type="button">Quick Image</button>
+  <button id="UploadBtn" class="btn btn-primary flat_btn" data-close-others="true" type="button"><i class="fa fa-picture-o fa-3x"></i></button>
 
 
-  <button id="myButton" class="btn btn-primary flat_btn" type="button">Quick Link</button>
+  <button id="myButton" class="btn btn-primary flat_btn" data-close-others="true" type="button"><i class="fa fa-link fa-3x"></i></button>
+
+   <button id="RandomThought" class="btn btn-primary flat_btn" data-close-others="true" type="button"><i class="fa fa-random fa-3x"></i></button>
 
   
      <script type="text/javascript">
@@ -37,7 +42,14 @@
     // Animation complete.
   });
 });
+
+       $('#RandomThought').click(function() {
+  $('.hideme_random').toggle(100, function() {
+    // Animation complete.
+  });
+});
     </script>
+
 
 
     {% endif %}
@@ -49,6 +61,7 @@
   
 
         {% for i in posts %}
+        
         <div class="col-xs-12">
           <dl class='palette palette-green-sea post_info'>
             
@@ -58,24 +71,31 @@
               </a>
               {% if i.updated_on %} 
               <i class='navbar-right'>
-                Updated on {{i.updated_on}}<br>Created on {{i.created_on}}
+               <b> Updated on {{i.updated_on.strftime('%Y/%m/%d | %H:%M:%S')}}<br>Created on {{i.created_on.strftime('%Y/%m/%d | %H:%M:%S')}}</b>
               </i>
               
               {% else%}
-              <i class='navbar-right'>
-                Created on {{i.created_on}}
-              </i>
+              <i class='navbar-right'><b>
+                Created on {{i.created_on.strftime('%Y/%m/%d | %H:%M:%S')}}
+              </i></b>
               {% endif %}
             </dd>
-            <dd id="{{i.title.replace(' ', '%20')}}" href="#{{i.title.replace(' ', '%20')}}"><b>Title:</b> <a href="{{url_for('posts')}}#{{i.title.replace(' ', '%20')}}">{{ i.title }}</a></dd>
+            <dd id="{{i.title.replace(' ', '%20')}}" href="#{{i.title.replace(' ', '%20')}}"><b>Title:</b> <b><a href="{{url_for('single_post', post_id=i._id)}}">{{ i.title }}</b></a></dd>
           </dl>
           
           <dl class="post-class">
-              
           <br>
             <dt>
               {{ i.entry|markdown }}
+
+            
+            
             </dt>
+
+            <dt>
+
+            </dt>
+
                {% for y in i.tags %}
                
                     <a href="{{url_for('by_tag', tag=y)}}" class="btn tag_btn">{{y}}</a>

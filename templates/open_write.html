@@ -10,7 +10,7 @@
           <h3>
             Sail Away...
           </h3>
-          <form class="login-form" action="{{url_for('write')}}" method="POST" name="form">
+          <form class="login-form" action="{{url_for('open_write')}}" method="POST" name="form">
             <div class="form-group">
               {{ form.hidden_tag() }}
               {{ form.post_title(class_="form-control login-field") }}
